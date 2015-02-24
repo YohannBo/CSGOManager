@@ -1,0 +1,15 @@
+<section data-ng-controller="ServercsController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="servercs.serverName"></h1>
+	</div>
+	<div class="pull-right">
+		<a class="btn btn-primary" href="/#!/servercs/{{servercs._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+	</div>
+	<p class="lead" data-ng-bind="servercs.ip"></p>
+	<p class="lead" data-ng-bind="servercs.port"></p>
+</section>

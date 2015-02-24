@@ -1,0 +1,35 @@
+<section data-ng-controller="ConsoleController" data-ng-init="console()">
+	<div class="page-header">
+		<h1>Console</h1>
+	</div>
+	<form name="consoleForm" class="form-horizontal" data-ng-submit="sendCmd()" novalidate>
+		<fieldset>
+			<div class="form-group">
+				<label class="control-label" for="servercs">Server CS</label>
+				<div class="controls">
+					<select ng-model="selectedServer" class="form-control" name="servercs" id="servercs" ng-options="srv.serverName for srv in servercs">
+						<option value="">Select a server</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="pwd">Password</label>
+				<div class="controls">
+					<input name="pwd" type="password" data-ng-model="pwd" id="pwd" class="form-control" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="cmd">Command</label>
+				<div class="controls">
+					<textarea name="cmd" data-ng-model="cmd" id="cmd" class="form-control" cols="30" rows="10"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="submit" class="btn btn-default">
+			</div>
+			<div data-ng-show="error" class="text-danger">
+				<strong data-ng-bind="error"></strong>
+			</div>
+		</fieldset>
+	</form>
+</section>
