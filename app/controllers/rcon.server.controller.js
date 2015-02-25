@@ -18,7 +18,7 @@ exports.sendCmd = function(req, res) {
 	var cmd = req.body.cmd;
 
 	// TODO : Authentication
-	var rcon = new Rcon({
+	/*var rcon = new Rcon({
 		address: ip + ':' + port,
 		password: pwd,
 		initCvars: false
@@ -34,10 +34,11 @@ exports.sendCmd = function(req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				res.json(true);
+				res.json(success: true);
 			}
 		});
-	});
+	});*/
+	res.json(success: true);
 };
 
 /**
