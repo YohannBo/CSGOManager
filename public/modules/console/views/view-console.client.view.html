@@ -2,34 +2,35 @@
 	<div class="page-header">
 		<h1>Console</h1>
 	</div>
-	<form name="consoleForm" class="form-horizontal" data-ng-submit="sendCmd()" novalidate>
-		<fieldset>
-			<div class="form-group">
-				<label class="control-label" for="servercs">Server CS</label>
-				<div class="controls">
-					<select ng-model="selectedServer" class="form-control" name="servercs" id="servercs" ng-options="srv.serverName for srv in servercs">
-						<option value="">Select a server</option>
-					</select>
-				</div>
+		<div class="form-group">
+			<label class="control-label" for="servercs">Server CS</label>
+			<div class="controls">
+				<select ng-change="serverChange()" ng-model="selectedServer" class="form-control" name="servercs" id="servercs" ng-options="srv.serverName for srv in servercs" style="display: inline-block; width: 90%;">
+					<option value="">Select a server</option>
+				</select>
+				<button ng-disabled="!socketNotConnected" class='btn btn-sm btn btn-success' ng-click="connexionSocket()">Connexion</button>
 			</div>
-			<div class="form-group">
-				<label class="control-label" for="pwd">Password</label>
-				<div class="controls">
-					<input name="pwd" type="password" data-ng-model="pwd" id="pwd" class="form-control" required>
-				</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label" for="pwd">Password</label>
+			<div class="controls">
+				<input name="pwd" type="password" ng-disabled="socketNotConnected" data-ng-model="pwd" id="pwd" class="form-control" required>
 			</div>
-			<div class="form-group">
-				<label class="control-label" for="cmd">Command</label>
-				<div class="controls">
-					<textarea name="cmd" data-ng-model="cmd" id="cmd" class="form-control" cols="30" rows="10"></textarea>
-				</div>
+		</div>
+		<div class="form-group">
+			<label class="control-label" for="cmd">Command</label>
+			<div class="controls">
+				<textarea name="cmd" ng-disabled="socketNotConnected" data-ng-model="cmd" id="cmd" class="form-control" cols="30" rows="10"></textarea>
 			</div>
-			<div class="form-group">
-				<input type="submit" class="btn btn-default">
+		</div>
+		<div class="form-group">
+			<button class='btn btn-sm btn-primary' ng-disabled="socketNotConnected" ng-click="sendCmd()">Send command</button>
+		</div>
+		<div  id="cmdHistory" style="background-color: #e2e2e2; border: medium solid #c2c2c2; padding-bottom: 10px; padding-left: 10px; padding-top: 10px;">
+			<div data-ng-show="history" data-ng-repeat="hist in history">
+				<small data-ng-bind="hist.date"></small> ==>
+				<small data-ng-bind="hist.serverName"></small> ==>
+				<strong data-ng-bind="hist.message" class="{{hist.type}}"></strong>
 			</div>
-			<div data-ng-show="error" class="text-danger">
-				<strong data-ng-bind="error"></strong>
-			</div>
-		</fieldset>
-	</form>
+		</div>
 </section>
