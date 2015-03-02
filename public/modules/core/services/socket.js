@@ -8,7 +8,7 @@ angular.module('core').factory('Socket', ['socketFactory',
 			if(path != null || path != undefined){
 				return socketFactory({
 					prefix: '',
-					ioSocket: io.connect(path)
+					ioSocket: io.connect(path ,{'forceNew':true })
 				});
 			}
 			else{

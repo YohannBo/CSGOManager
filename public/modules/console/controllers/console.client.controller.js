@@ -53,7 +53,6 @@ angular.module('console').controller('ConsoleController', ['$scope', '$statePara
 		function socketDisconnect(){
 			if($scope.sockIo){
 				$scope.sockIo.disconnect();
-				$scope.sockIo = undefined;
 			}
 			$scope.socketNotConnected = true;
 		}
