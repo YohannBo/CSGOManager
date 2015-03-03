@@ -11,7 +11,7 @@ function RconRequest(params) {
 	this.buffer = new Buffer(this.bodySize + 14);
 	
 	// Substract 4 because the packet size field is not included when determining the size of the packet
-	this.buffer.writeInt32LE(this.buffer.length - 4, 0)
+	this.buffer.writeInt32LE(this.buffer.length - 4, 0);
 	this.buffer.writeInt32LE(this.id, 4);
 	this.buffer.writeInt32LE(this.type, 8);
 	this.buffer.write(this.body, 12, this.buffer.length - 2, 'ascii');

@@ -8,8 +8,8 @@ function RconSocket(params) {
 	this._host = params.host;
 	this._port = params.port;
 	this._connection = null;
-	Log('RconSocket', params);
-}
+	Log('TCP Socket', params);
+};
 
 RconSocket.prototype.__proto__ = EventEmitter.prototype;
 RconSocket.prototype.connect = function(cb) {
