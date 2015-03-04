@@ -2,17 +2,17 @@ var Net = require('net');
 var EventEmitter = require('events').EventEmitter;
 var Log = require('../util.js').log;
 
-module.exports = RconSocket;
+module.exports = TCPSocket;
 
-function RconSocket(params) {
+function TCPSocket(params) {
 	this._host = params.host;
 	this._port = params.port;
 	this._connection = null;
 	Log('TCP Socket', params);
 };
 
-RconSocket.prototype.__proto__ = EventEmitter.prototype;
-RconSocket.prototype.connect = function(cb) {
+TCPSocket.prototype.__proto__ = EventEmitter.prototype;
+TCPSocket.prototype.connect = function(cb) {
 	var self = this;
 	Log('Initializing TCP connection to ' + this._host + ':' + this._port)
 	
@@ -36,16 +36,16 @@ RconSocket.prototype.connect = function(cb) {
 	});
 };
 
-RconSocket.prototype.write = function(buffer, cb) {
+TCPSocket.prototype.write = function(buffer, cb) {
 	Log('Sending TCP data', buffer);
 	this._connection.write(buffer, cb);
 };
 
-RconSocket.prototype.disconnect = function(cb) {
+TCPSocket.prototype.disconnect = function(cb) {
 	this._connection.end();
 	setImmediate(cb);
 };
-RconSocket.prototype.destroy = function(cb) {
+TCPSocket.prototype.destroy = function(cb) {
 	this._connection.destroy();
 	setImmediate(cb);
 };

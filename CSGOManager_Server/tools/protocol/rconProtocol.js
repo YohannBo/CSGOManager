@@ -1,6 +1,6 @@
 var RconRequest = require('../packets/rconRequest.js');
 var RconResponse = require('../packets/rconResponse.js');
-var RconSocket = require('../sockets/rconSocket.js');
+var RconSocket = require('../sockets/tcpSocket.js');
 var EventEmitter = require('events').EventEmitter;
 var Log = require('../util.js').log;
 
