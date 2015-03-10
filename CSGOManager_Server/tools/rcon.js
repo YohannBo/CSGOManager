@@ -49,7 +49,7 @@ Rcon.prototype.connect = function(address, password, cb) {
 	}
 	
 	if(this.connected === true) {
-		Log('Error: Connection already established');
+		Log('Error: Connection already established !!');
 		return (cb && cb( {code:'CONNECTION_EXISTS'}));
 	}
 	
