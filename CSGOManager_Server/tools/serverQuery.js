@@ -43,4 +43,9 @@ ServerQuery.prototype.connect = function(address, pwd, cb){
 ServerQuery.prototype.runQuery = function(queryType, cb){
 	var self = this;
 	//TODO : Continue
-}
+};
+
+ServerQuery.A2SInfo = "A2S_INFO";
+ServerQuery.A2SPlayer = "A2S_PLAYER";
+ServerQuery.A2Ping = "A2S_PING";
+ServerQuery.A2SServerQueryGetChallenge = "A2S_SERVERQUERY_GETCHALLENGE";
