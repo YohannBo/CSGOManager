@@ -1,14 +1,14 @@
-var serverQueryProtocol = require("./protocol/serverQueryProtocol.js");
+var ServerQueryProtocol = require("./protocol/serverQueryProtocol.js");
+var ServerQueryParser = require("./packets/serverQueryResponseParser.js");
 var EventEmitter = require('events').EventEmitter;
 var Log = require('./util.js').log;
 
 module.exports = ServerQuery;
 
-function ServerQuery(address, pwd){
+function ServerQuery(server){
 	this.connected = false;
 	this.connecting = false;
-	this.password = pwd;
-	this.address = address;
+	this.server = server;
 	this.protocol = null;
 	
 	Log('Initialized serverQuery instance', this);
@@ -17,7 +17,7 @@ function ServerQuery(address, pwd){
 ServerQuery.prototype.__proto__ = EventEmitter.prototype;
 
 
-ServerQuery.prototype.connect = function(address, pwd, cb){
+ServerQuery.prototype.connect = function(server, cb){
 	var self = this; 
 	
 	if(this.connected === true){
@@ -26,7 +26,9 @@ ServerQuery.prototype.connect = function(address, pwd, cb){
 	}
 	
 	this.connecting = true;
-	this.protocol.connect(address, pwd, function(err){
+	this.protocol = new ServerQueryProtocol();
+	
+	this.protocol.connect(server, function(err){
 		if(!err){
 			Log('Connected');
 			self.connecting = false;
@@ -42,7 +44,27 @@ ServerQuery.prototype.connect = function(address, pwd, cb){
 
 ServerQuery.prototype.runQuery = function(queryType, cb){
 	var self = this;
-	//TODO : Continue
+	
+	if(queryType !== ServerQuery.A2SInfo && queryType !== ServerQuery.A2SPlayer
+	 && queryType !== ServerQuery.A2Ping && queryType !== ServerQuery.A2SServerQueryGetChallenge){
+		Log('Invalid query type:', queryType);
+		return setImmediate(cb.bind(self, {code: 'INVALID_QUERY_TYPE'}));
+	}
+	
+	if(!this.connected){
+		Log('Query issued before connection, adding to queue');
+		this.once('connect', this.runQuery.bind(this, queryType, cb));
+		if(!this.connecting) this.connect();
+		return;
+	}
+	
+	this.protocol.query(queryType, function(response){
+		Log(response);
+		//Parsing response
+		data = ServerQueryParser.ServerQueryResponseParser(response);
+		Log(data);
+		cb && cb(err, data);
+	});
 };
 
 ServerQuery.A2SInfo = "A2S_INFO";

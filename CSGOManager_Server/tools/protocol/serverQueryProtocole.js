@@ -24,7 +24,7 @@ ServerQueryProtocol.prototype.connect = function(server, cb) {
 		if(err) {
 			return cb(err);
 		}
-		
+
 		self.socket.on('error', function(err) {
 			err.fatal = true;
 			self.emit(err);
@@ -85,7 +85,6 @@ ServerQueryProtocol.prototype.sendRequest = function(requestBuffer, queryType, l
 ServerQueryProtocol.prototype.getResponse = function(responseBuffer) {
 	var response = serverQueryResponse(responseBuffer);
 	var header = response.readInt8(0);
-	
 	var action;
 	if(header == ServerQueryProtocol.ChallengeResponseHeader){
 		action = this.requestsChallenge.shift();
