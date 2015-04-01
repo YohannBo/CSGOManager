@@ -1,62 +1,55 @@
-var dgram = require('dgram');
-var EventEmitter = require('events').EventEmitter;
-var Log = require('../util.js');
+var socket = require('dgram');
+var eventEmitter = require('events').EventEmitter;
+var util = require("util");
 
-module.exports = UDPSocket;
+module.exports = UdpSocket;
 
-function UDPSocket(params){
-	this.host = params.host;
-	this.port = params.port;
+function UdpSocket(addr, port){
+	eventEmitter.call(this);
+	this.addr = addr;
+	this.port = port;
 	this.connection = null;
-	Log('UDP Socket');
 };
 
-UDPSocket.prototype.__proto__ = EventEmitter.prototype;
+util.inherits(UdpSocket, eventEmitter);
 
-UDPSocket.prototype.connect = function(cb){
-	var self = this;
-	Log('Initialize UDP connection to ' + this.host + ':' + this.port);
-	
-	this.connection = dgram.createSocket('udp4', cb);
-	
-	socket.on('message', function(msg, rinfo) {
-		Log('Received %d bytes from %s:%d\n', msg.length, rinfo.address, rinfo.port);
-		self.emit('message', data);
+UdpSocket.prototype.connect(){
+	this.socket.bind({
+		addresse: this.addr,
+		port: this.port
 	});
 	
-	socket.on('listening', function() {
+	this.connection = socket.creatSocket('udp4');
+	
+	this.connection.on("error", function(err){
+		util.log("Server error : \n" + err.stack);
+		this.disconnect();
+		this.emit('error', err);
+	});
+	
+	this.connection.on("message", function(msg, rinfo){
+		util.log("Server got: " + msg + " from" + rinfo.address + ":" + rinfo.port);
+		this.emit('message', msg);
+	});
+	
+	this.connection.on("listening", function(){
 		var address = server.address();
-		Log('UDP connection listening' + address.address + ":" + address.port);
-		self.emit('listening');
+		util.log("server listening " + address.address + ":" + address.port);
+		this.emit('listening', msg);
 	});
 	
-	socket.on('close', function() {
-		Log('close connection to %s:%d',rinfo.address, rinfo.port);
-		self.emit('close', data);
-	});
-	
-	socket.on('error', function(err) {
-		Log('UDP connection error : %s',err.stack);
-		this.connection.close();
-		self.emit('error', err);
-	});
-	
-	socket.bind({
-	  address: this.host,
-	  port: this.port,
-	  exclusive: true
+	this.connection.on("close", function(){
+		util.log("server disconnected");
+		this.emit('close', msg);
 	});
 };
 
-UDPSocket.prototype.write = function(buffer, cb){
-	Log('Sending UDP data', buffer);
-	this.connection.send(buffer, 0, buffer.length, this.port, this.host, cb);
-};
-
-UDPSocket.prototype.disconnect = function(cb) {
+UpdSocket.prototype.disconnect(){
 	this.connection.close();
-	setImmediate(cb);
 };
 
-
-
+UdpSocket.prototype.sendMsg(msg){
+	this.connection.send(msg, 0, msg.length, function(err){
+		this.disconnect();
+	});
+};

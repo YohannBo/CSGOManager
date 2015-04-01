@@ -1,51 +1,59 @@
-var Net = require('net');
-var EventEmitter = require('events').EventEmitter;
-var Log = require('../util.js').log;
+var net = require('net');
+var eventEmitter = require('events').EventEmitter;
+var util = require("util");
 
-module.exports = TCPSocket;
+module.exports = TcpSocket;
 
-function TCPSocket(params) {
-	this._host = params.host;
-	this._port = params.port;
-	this._connection = null;
-	Log('TCP Socket', params);
+function TcpSocket(addr, port){
+	eventEmitter.call(this);
+	this.addr = addr;
+	this.port = port;
+	this.connection = null;
 };
 
-TCPSocket.prototype.__proto__ = EventEmitter.prototype;
-TCPSocket.prototype.connect = function(cb) {
-	var self = this;
-	Log('Initializing TCP connection to ' + this._host + ':' + this._port)
+util.inherits(TcpSocket, eventEmitter);
+
+TcpSocket.prototype.connect(){
 	
-	this._connection = Net.createConnection( {
-		host: this._host,
-		port: this._port
-	}, cb);
+	this.connection = net.createConnection(this.port, this.addr);
 	
-	this._connection.on('connect', function() {
-		Log('TCP connection established');
-		self.emit('connect');
+	this.conection.on("connect", function(){
+		util.log("connection is successfully established");
+		this.emit('connect');
 	});
-
-	this._connection.on('error', function(err) {
-		Log('TCP connection error', err);
-		self.emit('error', err);
+	
+	this.conection.on("error", function(err){
+		util.log("Error : \n" + err.stack);
+		this.disconnect();
+		this.destroy();
+		this.emit('error', err);
 	});
-
-	this._connection.on('data', function(data) {
-		self.emit('data', data);
+	
+	this.connection.on("data", function(msg){
+		util.log("Server got: " + msg);
+		this.emit('data', msg);
+	});
+	
+	this.connection.on("close", function(had_error){
+		if(had_error != null){
+			util.log("Server end with an error : " + had_error);
+		}
+		util.log("server disconnected");
+		this.emit('close', msg);
 	});
 };
 
-TCPSocket.prototype.write = function(buffer, cb) {
-	Log('Sending TCP data', buffer);
-	this._connection.write(buffer, cb);
+TcpSocket.prototype.write = function(buffer) {
+	util.log('Sending TCP data', buffer);
+	this.connection.write(buffer);
 };
 
-TCPSocket.prototype.disconnect = function(cb) {
-	this._connection.end();
-	setImmediate(cb);
+TcpSocket.prototype.disconnect = function() {
+	util.log('TCP socket disconnected');
+	this.connection.end();
 };
-TCPSocket.prototype.destroy = function(cb) {
-	this._connection.destroy();
-	setImmediate(cb);
+
+TcpSocket.prototype.destroy = function() {
+	util.log('TCP socket destroyed');
+	this.connection.destroy();
 };
