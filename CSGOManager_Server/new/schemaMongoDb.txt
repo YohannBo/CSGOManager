@@ -1,0 +1,59 @@
+Match
+
+{
+	Date : ,
+	Equipe1 : {
+		player1 : {
+			steamId :,
+			pseudo :
+		},
+		player2 : {
+			steamId :,
+			pseudo :
+		},
+		player3 : {
+			steamId :,
+			pseudo :
+		},
+		player4 : {
+			steamId :,
+			pseudo :
+		},
+		player5 : {
+			steamId :,
+			pseudo :
+		}
+	},
+	Equipe2 : {
+		player1 : {
+			steamId :,
+			pseudo :
+		},
+		player2 : {
+			steamId :,
+			pseudo :
+		},
+		player3 : {
+			steamId :,
+			pseudo :
+		},
+		player4 : {
+			steamId :,
+			pseudo :
+		},
+		player5 : {
+			steamId :,
+			pseudo :
+		}
+	},
+	Mode : (BO1, BO3, BO5),
+	Map : [
+		{
+			name : , 
+			round [
+			]
+		},
+		{}
+	]
+	
+}

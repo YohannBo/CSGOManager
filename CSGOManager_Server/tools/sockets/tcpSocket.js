@@ -13,39 +13,40 @@ function TcpSocket(addr, port){
 
 util.inherits(TcpSocket, eventEmitter);
 
-TcpSocket.prototype.connect(){
+TcpSocket.prototype.connect(cb){
 	
-	this.connection = net.createConnection(this.port, this.addr);
+	this.connection = net.createConnection(this.port, this.addr, cb);
 	
 	this.conection.on("connect", function(){
-		util.log("connection is successfully established");
+		util.log("TcpSocket >> connection is successfully established");
 		this.emit('connect');
 	});
 	
 	this.conection.on("error", function(err){
-		util.log("Error : \n" + err.stack);
+		util.log("TcpSocket >> Error : \n" + err.stack);
 		this.disconnect();
 		this.destroy();
 		this.emit('error', err);
 	});
 	
 	this.connection.on("data", function(msg){
-		util.log("Server got: " + msg);
+		util.log("TcpSocket >> Server got: " + msg);
 		this.emit('data', msg);
 	});
 	
 	this.connection.on("close", function(had_error){
 		if(had_error != null){
-			util.log("Server end with an error : " + had_error);
+			util.log("TcpSocket >> Server end with an error : " + had_error);
+			this.emit('error', had_error);
 		}
-		util.log("server disconnected");
-		this.emit('close', msg);
+		util.log("TcpSocket >> server disconnected");
+		this.emit('close');
 	});
 };
 
-TcpSocket.prototype.write = function(buffer) {
-	util.log('Sending TCP data', buffer);
-	this.connection.write(buffer);
+TcpSocket.prototype.write = function(buffer, cb) {
+	util.log('TcpSocket >> Sending TCP data', buffer);
+	this.connection.write(buffer, cb);
 };
 
 TcpSocket.prototype.disconnect = function() {

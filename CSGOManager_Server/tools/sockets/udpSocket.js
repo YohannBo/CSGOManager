@@ -22,24 +22,24 @@ UdpSocket.prototype.connect(){
 	this.connection = socket.creatSocket('udp4');
 	
 	this.connection.on("error", function(err){
-		util.log("Server error : \n" + err.stack);
+		util.log("UdpSocket >> Server error : \n" + err.stack);
 		this.disconnect();
 		this.emit('error', err);
 	});
 	
 	this.connection.on("message", function(msg, rinfo){
-		util.log("Server got: " + msg + " from" + rinfo.address + ":" + rinfo.port);
+		util.log("UdpSocket >> Server got: " + msg + " from" + rinfo.address + ":" + rinfo.port);
 		this.emit('message', msg);
 	});
 	
 	this.connection.on("listening", function(){
 		var address = server.address();
-		util.log("server listening " + address.address + ":" + address.port);
+		util.log("UdpSocket >> server listening " + address.address + ":" + address.port);
 		this.emit('listening', msg);
 	});
 	
 	this.connection.on("close", function(){
-		util.log("server disconnected");
+		util.log("UdpSocket >> server disconnected");
 		this.emit('close', msg);
 	});
 };
