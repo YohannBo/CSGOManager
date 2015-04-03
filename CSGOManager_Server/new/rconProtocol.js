@@ -70,7 +70,7 @@ RconProtocol.prototype.senCmd(cmd, cb){
 	
 	this.once(ackId, function(res) {
 		this.removeListener(reqId, parseRequest);
-		var res = self.queue[reqId];
+		var res = this.queue[reqId];
 		delete this.queue[reqId];
 		return cb(null, res);
 	});
@@ -93,7 +93,7 @@ function exec(type, body){
 	this.socket.write(request, function(err) {
 		if(err) {
 			util.log("RconProtocol >> Error sending packet" + reqId);
-			self.emit('error', err);
+			this.emit('error', err);
 			return;
 		}
 		util.log("RconProtocol >> Sent packet" + reqId);
